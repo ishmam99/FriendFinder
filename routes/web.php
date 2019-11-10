@@ -14,6 +14,7 @@ Route::post('follow/{user}','FollowController@follow');
 
 
 Auth::routes();
+
 Route::get('/profile/{user}/edit','ProfileController@edit')->name('profile.edit');
 Route::patch('/profile/{user}','ProfileController@update')->name('profile.update');
 Route::get('/profile/{user}','ProfileController@index')->name('profile.show');

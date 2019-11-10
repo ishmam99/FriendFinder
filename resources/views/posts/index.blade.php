@@ -1,11 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
+
+<section class="posts endless-pagination" data-next-page="{{ $posts->nextPageUrl() }}">
     <div class="container">
-        @foreach ($posts as $post)
-            
-   
+        <div class="d-flex justify-content-end">
+        <div class="col-md-2 ">
        
+           <h2>new users</h2>
+           @foreach ($peoples as $people)
+       <h6> <a href="/profile/{{$people->id}}" style="font-weight-bolder">{{$people->username}}</a> |</h6>
+           @endforeach
+     </div>
+    </div>
+        @foreach ($posts as $post)
+       
+     <div class="md-col-8">     
+    <div class="article">
+        
         <div class="row pt-2">    
             <div class="col-6 offset-3">
             <div>
@@ -35,14 +47,75 @@
                         <a href="/p/{{$post->id}}">  <img src="/storage/{{$post->image}}" class="w-100"></a>
                    
                 </div>
-                
-            </div>
-        @endforeach
-        <div class="row">
-            <div class="col-12 d-flex justify-content-center">
-                {{$posts->links()}}
-            </div>
             </div>
         </div>
+     </div>
+        @endforeach
+      {{--  <div class="row">
+             <div class="col-12 d-flex justify-content-center">
+                {{$posts->links()}}
+            </div> 
+            </div>--}}
+        </div>
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <script>
+
+            $(document).ready(function() {
+            
+            
+            
+            /*    $('body').on('click', '.pagination a', function(e){
+            
+                    e.preventDefault();
+                    var url = $(this).attr('href');
+            
+                    $.get(url, function(data){
+                        $('.posts').html(data);
+                    });
+            
+                });*/
+            
+                $(window).scroll(fetchPosts);
+            
+                function fetchPosts() {
+            
+                    var page = $('.endless-pagination').data('next-page');
+            
+                    if(page !== null) {
+            
+                        clearTimeout( $.data( this, "scrollCheck" ) );
+            
+                        $.data( this, "scrollCheck", setTimeout(function() {
+                            var scroll_position_for_posts_load = $(window).height() + $(window).scrollTop() + 100;
+            
+                            if(scroll_position_for_posts_load >= $(document).height()) {
+                                $.get(page, function(data){
+                                    $('.posts').append(data.posts);
+                                    $('.endless-pagination').data('next-page', data.next_page);
+                                });
+                            }
+                        }, 350))
+            
+                    }
+                }
+            
+            
+            })
+            
+            </script>
 @endsection

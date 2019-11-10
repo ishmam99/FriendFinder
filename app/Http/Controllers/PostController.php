@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
+
 use App\Post;
+use App\User;
 use Intervention\Image\Facades\Image as Image;
 class PostController extends Controller
 {
@@ -13,11 +16,20 @@ class PostController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    protected $posts_per_page = 3;
+    public function index(Request $request)
     {
         $users=auth()->user()->following()->pluck('profiles.user_id');
-        $posts=Post::whereIn('user_id',$users)->with('user')->latest()->paginate(5);
-       return view('posts.index',compact('posts'));
+        $peoples=User::all();
+        $posts=Post::whereIn('user_id',$users)->with('user')->latest()->paginate($this->posts_per_page);
+
+        if($request->ajax()) {
+            return [
+                'posts' => view('posts.ajax.index')->with(compact('posts'))->render(),
+                'next_page' => $posts->nextPageUrl()
+            ];
+        }
+       return view('posts.index',compact('peoples','posts'));
     }
 
 

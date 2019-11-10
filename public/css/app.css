@@ -1,4 +1,5 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,800&display=swap);@charset "UTF-8";
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,800&display=swap);
+@charset "UTF-8";
 
 /*!
  * Bootstrap v4.3.1 (https://getbootstrap.com/)
@@ -72,7 +73,9 @@ body {
   line-height: 1.6;
   color: #212529;
   text-align: left;
-  background-color: #f8fafc;
+  background-color:   #e2f4ee
+
+  ;
 }
 
 [tabindex="-1"]:focus {
@@ -4740,14 +4743,15 @@ input[type=button].btn-block {
 
 .card {
   position: relative;
+  color: white; 
   display: flex;
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #fff;
+  background: rgba(0, 0, 0, 0.6);
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
-  border-radius: 0.25rem;
+  border-radius: 25px;
 }
 
 .card > hr {
@@ -4792,6 +4796,7 @@ input[type=button].btn-block {
 }
 
 .card-header {
+  text-align: center;
   padding: 0.75rem 1.25rem;
   margin-bottom: 0;
   background-color: rgba(0, 0, 0, 0.03);
@@ -4861,6 +4866,59 @@ input[type=button].btn-block {
 
 .card-deck .card {
   margin-bottom: 15px;
+}
+.card .inputBox {
+  position: relative;
+}
+
+.card .inputBox input {
+  width: 100%;
+  padding: 0.625rem 0;
+  font-size: 1rem;
+  color: #fff;
+  letter-spacing: 0.062rem;
+  margin-bottom: 1.875rem;
+  border: none;
+  border-bottom: 0.065rem solid #fff;
+  outline: none;
+  background: transparent;
+}
+
+.card .inputBox label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.625rem 0;
+  font-size: 1rem;
+  color: #fff;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.card .inputBox input:focus ~ label,
+.card .inputBox input:valid ~ label,
+.card .inputBox input:not([value=""]) ~ label {
+  top: -1.125rem;
+  left: 0;
+  color: #41e926
+;
+  font-size: 0.75rem;
+}
+
+.card input[type="submit"] {
+  border: none;
+  outline: none;
+  color: #fff;
+  background-color:  #41e926
+;
+  padding: 0.625rem 1.25rem;
+  cursor: pointer;
+  border-radius: 0.312rem;
+  font-size: 1rem;
+}
+
+.card input[type="submit"]:hover {
+  background-color: #1cb1f5;
 }
 
 @media (min-width: 576px) {
