@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 use App\Post;
 use App\User;
+use DB;
+use App\Profile;
 use Intervention\Image\Facades\Image as Image;
 class PostController extends Controller
 {
@@ -20,16 +22,51 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $users=auth()->user()->following()->pluck('profiles.user_id');
-        $peoples=User::all();
+        $people=Profile::whereNotIn('id',$users)->with('user')->get();
+        $friends=Profile::whereIn('id',$users)->with('user')->get();
         $posts=Post::whereIn('user_id',$users)->with('user')->latest()->paginate($this->posts_per_page);
-
         if($request->ajax()) {
             return [
                 'posts' => view('posts.ajax.index')->with(compact('posts'))->render(),
                 'next_page' => $posts->nextPageUrl()
             ];
         }
-       return view('posts.index',compact('peoples','posts'));
+        return view('posts.index',compact('people','posts','friends'));
+    }
+    public function test(Request $request)
+    {
+        $users=auth()->user()->following()->pluck('profiles.user_id');
+        $people=Profile::whereNotIn('id',$users)->with('user')->get();
+        $friends=Profile::whereIn('id',$users)->with('user')->get();
+        $posts=Post::whereIn('user_id',$users)->with('user')->latest()->paginate($this->posts_per_page);
+        if($request->ajax()) {
+            return [
+                'posts' => view('posts.ajax.index')->with(compact('posts'))->render(),
+                'next_page' => $posts->nextPageUrl()
+            ];
+        }
+        return view('layouts.test',compact('people','posts','friends'));
+    }
+
+    public function friend()
+    {
+        $users=auth()->user()->following()->pluck('profiles.user_id');
+        $people=Profile::whereNotIn('id',$users)->with('user')->get();
+        $friends=Profile::whereIn('id',$users)->with('user')->get();
+       
+        return view('newsfeed.friends',compact('people','friends'));
+    }
+
+    public function follower()
+    {
+        $users=auth()->user()->following()->pluck('profiles.user_id');
+        $friends=Profile::whereIn('id',$users)->with('user')->get();
+        $follower=auth()->user()->profile->followers->all();
+        //dd($follower);
+        $people=Profile::whereNotIn('id',$users)->with('user')->get();
+     //   $friends=Profile::whereIn('id',$users)->with('user')->get();
+       
+        return view('newsfeed.follower',compact('people','friends','follower'));
     }
 
 

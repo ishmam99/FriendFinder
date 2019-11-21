@@ -15,6 +15,13 @@ class ProfileController extends Controller
         return view('profiles.index', compact('user','follows'));
        
     }
+    public function indextest(\App\User $user)
+    {
+        $follows=(auth()->user()) ? auth()->user()->following->contains($user->id) : false;
+      
+        return view('layouts.test', compact('user','follows'));
+       
+    }
     public function edit(\App\User $user)
     {
 
@@ -27,11 +34,10 @@ class ProfileController extends Controller
     {
         $this->authorize('update', $user->profile);
         $data= request()->validate([
-            'title'=>'required',
-            'description'=>'required',
-            'url'=>'url',
+            
            
-          ]);
+           
+        ]);
   
           auth()->user()->profile->update($data);
           if (request('image')){
@@ -40,6 +46,14 @@ class ProfileController extends Controller
             $image=Image::make(public_path("storage/{$imagePath}"))->fit(1000,1000);
             $image->save();
              auth()->user()->profile->update(['image'=>$imagePath]);
+          } 
+          auth()->user()->profile->update($data);
+          if (request('image_cover')){
+
+            $imagePath= request('image_cover')->store('profile','public');
+            $image=Image::make(public_path("storage/{$imagePath}"))->fit(1030,430);
+            $image->save();
+             auth()->user()->profile->update(['cover'=>$imagePath]);
           } 
          
          
